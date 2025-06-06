@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "623468692084",
+    "project_id": "bangunin-38293",
+    "storage_bucket": "bangunin-38293.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623468692084:android:328a271c8ed142102f0721",
+        "android_client_info": {
+          "package_name": "com.example.aplikasi_bangunan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD72UuQVXmT1zEfFWSH50sqjvgMArRCMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
