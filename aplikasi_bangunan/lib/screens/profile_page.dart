@@ -1,3 +1,4 @@
+
 // import 'dart:io';
 // import 'package:flutter/material.dart';
 // import 'package:image_picker/image_picker.dart';
@@ -36,43 +37,133 @@
 //     if (picked != null) {
 //       final dir = await getApplicationDocumentsDirectory();
 //       await File(picked.path).copy('${dir.path}/profile.jpg');
-
-//       // buat aplikasi biar auto restart 
-//       Restart.restartApp();
+//       Restart.restartApp(); // Restart to reload updated image
 //     }
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
+//       backgroundColor: const Color(0xFFFFFEF7),
 //       appBar: AppBar(
-//         title: const Text("Profil"),
+//         backgroundColor: const Color(0xFFFFD54F),
+//         elevation: 0,
+//         title: const Center(
+//           child: Text(
+//             "Profile",
+//             style: TextStyle(color: Colors.white),
+//           ),
+//         ),
+//         automaticallyImplyLeading: true,
 //       ),
 //       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
 //         child: Column(
 //           children: [
-//             const Text("Nama: Sandi", style: TextStyle(fontSize: 20)),
-//             const SizedBox(height: 5),
-//             const Text("Sandi: *****", style: TextStyle(fontSize: 16, color: Colors.grey)),
-//             const SizedBox(height: 20),
-//             CircleAvatar(
-//               radius: 60,
-//               backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-//               child: _profileImage == null
-//                   ? const Icon(Icons.person, size: 60)
-//                   : null,
+//             Row(
+//               children: [
+//                 CircleAvatar(
+//                   radius: 35,
+//                   backgroundImage:
+//                       _profileImage != null ? FileImage(_profileImage!) : null,
+//                   child: _profileImage == null
+//                       ? const Icon(Icons.person, size: 40)
+//                       : null,
+//                 ),
+//                 const SizedBox(width: 16),
+//                 Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: const [
+//                     Text(
+//                       "Welcome, Alif Aulia !",
+//                       style:
+//                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                     ),
+//                     Text(
+//                       "alifaulia@gmail.com",
+//                       style: TextStyle(color: Colors.grey),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//             const SizedBox(height: 30),
+
+//             // Ganti Password
+//             Container(
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[300],
+//                 borderRadius: BorderRadius.circular(30),
+//               ),
+//               child: ListTile(
+//                 leading: const Icon(Icons.lock_outline),
+//                 title: const Text(
+//                   "Ganti Password",
+//                   style: TextStyle(
+//                     color: Colors.blue,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//                 trailing: const Icon(Icons.arrow_forward_ios),
+//                 onTap: () {
+//                   // Logika ganti password di sini (jika diperlukan)
+//                 },
+//               ),
 //             ),
 //             const SizedBox(height: 20),
-//             ElevatedButton.icon(
-//               icon: const Icon(Icons.camera_alt),
-//               label: const Text("Ambil dari Kamera"),
-//               onPressed: () => _pickImage(ImageSource.camera),
+
+//             // Ganti dari Kamera
+//             SizedBox(
+//               width: double.infinity,
+//               child: ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   foregroundColor: Colors.black,
+//                   backgroundColor: Colors.grey[300],
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(20),
+//                   ),
+//                   elevation: 0,
+//                 ),
+//                 onPressed: () => _pickImage(ImageSource.camera),
+//                 child: const Text("Ganti Foto Kamera"),
+//               ),
 //             ),
-//             ElevatedButton.icon(
-//               icon: const Icon(Icons.photo_library),
-//               label: const Text("Ambil dari Galeri"),
-//               onPressed: () => _pickImage(ImageSource.gallery),
+//             const SizedBox(height: 10),
+
+//             // Ganti dari Galeri
+//             SizedBox(
+//               width: double.infinity,
+//               child: ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   foregroundColor: Colors.black,
+//                   backgroundColor: Colors.grey[300],
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(20),
+//                   ),
+//                   elevation: 0,
+//                 ),
+//                 onPressed: () => _pickImage(ImageSource.gallery),
+//                 child: const Text("Ganti Foto Galeri"),
+//               ),
+//             ),
+//             const Spacer(),
+
+//             // Tombol Logout
+//             SizedBox(
+//               width: double.infinity,
+//               height: 50,
+//               child: ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: const Color(0xFF8B0000),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(12),
+//                   ),
+//                 ),
+//                 onPressed: () {
+//                   // Tambahkan logika logout di sini
+//                 },
+//                 child: const Text("Logout"),
+//               ),
 //             ),
 //           ],
 //         ),
