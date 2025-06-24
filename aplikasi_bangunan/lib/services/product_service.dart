@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/product_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductService {
-  static Future<String> _getBaseUrl() async {
-    // Ganti dengan IP server kamu yang sesuai
-    const ipServer = '192.168.1.4';
-    return 'http://$ipServer:7109/api/Product';
-  }
+  static final String baseUrl =
+      dotenv.env['API_URL'] ?? (throw Exception("API_URL not found in .env"));
+
+  static String get endpoint => '$baseUrl/api/Product';
 
   // 🔸 GET all products
   static Future<List<Product>> fetchProducts() async {
     try {
-      final url = await _getBaseUrl();
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(endpoint));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -27,10 +26,9 @@ class ProductService {
   }
 
   // 🔸 GET product by ID
-  static Future<Product> fetchProductById(int id) async {
+  static Future<Product> fetchProductBynamaProduk(String namaProduk) async {
     try {
-      final url = await _getBaseUrl();
-      final response = await http.get(Uri.parse('$url/$id'));
+      final response = await http.get(Uri.parse('$endpoint/$namaProduk'));
 
       if (response.statusCode == 200) {
         return Product.fromJson(json.decode(response.body));
@@ -45,15 +43,10 @@ class ProductService {
   // 🔸 POST (add) product
   static Future<void> addProduct(Product product) async {
     try {
-      final url = await _getBaseUrl();
       final response = await http.post(
-        Uri.parse(url),
+        Uri.parse(endpoint),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'nama_Product': product.namaProduct,
-          'harga': product.harga,
-          'satuanBarang': product.satuanBarang,
-        }),
+        body: json.encode(product.toJson()),
       );
 
       if (response.statusCode != 201) {
@@ -67,15 +60,10 @@ class ProductService {
   // 🔸 PUT (update) product
   static Future<void> updateProduct(int id, Product product) async {
     try {
-      final url = await _getBaseUrl();
       final response = await http.put(
-        Uri.parse('$url/$id'),
+        Uri.parse('$endpoint/$id'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'nama_Product': product.namaProduct,
-          'harga': product.harga,
-          'satuanBarang': product.satuanBarang,
-        }),
+        body: json.encode(product.toJson()),
       );
 
       if (response.statusCode != 204 && response.statusCode != 200) {
@@ -89,8 +77,7 @@ class ProductService {
   // 🔸 DELETE product
   static Future<void> deleteProduct(int id) async {
     try {
-      final url = await _getBaseUrl();
-      final response = await http.delete(Uri.parse('$url/$id'));
+      final response = await http.delete(Uri.parse('$endpoint/$id'));
 
       if (response.statusCode != 204 && response.statusCode != 200) {
         throw Exception('Gagal menghapus produk. Status: ${response.statusCode}');

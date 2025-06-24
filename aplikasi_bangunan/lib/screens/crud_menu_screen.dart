@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aplikasi_bangunan/screens/product/daftar_product_screen.dart';
-import 'package:aplikasi_bangunan/screens/product/cari_product_screen.dart';
-import 'package:aplikasi_bangunan/screens/product/tambah_product_screen.dart';
-import 'package:aplikasi_bangunan/screens/product/update_product_screen.dart';
-import 'package:aplikasi_bangunan/screens/product/hapus_product_screen.dart';
-// import 'package:aplikasi_bangunan/screens/toko/daftar_toko_screen.dart';
-// import 'package:aplikasi_bangunan/screens/toko/cari_toko_screen.dart';
-// import 'package:aplikasi_bangunan/screens/toko/tambah_toko_screen.dart';
-// import 'package:aplikasi_bangunan/screens/toko/update_toko_screen.dart';
-// import 'package:aplikasi_bangunan/screens/toko/hapus_toko_screen.dart';
+import 'package:aplikasi_bangunan/screens/toko/daftar_toko_screen.dart';
 
 class CrudMenuScreen extends StatelessWidget {
   const CrudMenuScreen({super.key});
@@ -18,40 +10,16 @@ class CrudMenuScreen extends StatelessWidget {
       case 'Daftar Produk':
         Navigator.push(context, MaterialPageRoute(builder: (_) => DaftarProdukScreen()));
         break;
-      case 'Cari Id Produk':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => CariProdukScreen()));
-        break;
-      case 'Tambah Produk':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => TambahProdukScreen()));
-        break;
-      case 'Update Produk':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateProdukScreen()));
-        break;
-      case 'Hapus Produk':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => HapusProdukScreen()));
-        break;
     }
   }
 
-  // void navigateToko(BuildContext context, String label) {
-  //   switch (label) {
-  //     case 'Daftar Toko':
-  //       Navigator.push(context, MaterialPageRoute(builder: (_) => DaftarTokoScreen()));
-  //       break;
-  //     case 'Cari Id Toko':
-  //       Navigator.push(context, MaterialPageRoute(builder: (_) => CariTokoScreen()));
-  //       break;
-  //     case 'Tambah Toko':
-  //       Navigator.push(context, MaterialPageRoute(builder: (_) => TambahTokoScreen()));
-  //       break;
-  //     case 'Update Toko':
-  //       Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateTokoScreen()));
-  //       break;
-  //     case 'Hapus Toko':
-  //       Navigator.push(context, MaterialPageRoute(builder: (_) => HapusTokoScreen()));
-  //       break;
-  //   }
-  // }
+  void navigateToko(BuildContext context, String label) {
+    switch (label) {
+      case 'Daftar Toko':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => DaftarTokoScreen()));
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,18 +74,10 @@ class CrudMenuScreen extends StatelessWidget {
           children: [
             section('Data Produk', [
               'Daftar Produk',
-              'Cari Id Produk',
-              'Tambah Produk',
-              'Update Produk',
-              'Hapus Produk',
             ], (label) => navigateProduk(context, label)),
-            // section('Data Toko Bangunan', [
-            //   'Daftar Toko',
-            //   'Cari Id Toko',
-            //   'Tambah Toko',
-            //   'Update Toko',
-            //   'Hapus Toko',
-            // ], (label) => navigateToko(context, label)),
+            section('Data Toko Bangunan', [
+              'Daftar Toko',
+            ], (label) => navigateToko(context, label)),
           ],
         ),
       ),

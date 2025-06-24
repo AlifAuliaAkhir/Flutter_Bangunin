@@ -1,62 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:aplikasi_bangunan/models/product_model.dart';
-import 'package:aplikasi_bangunan/services/product_service.dart';
+import 'package:aplikasi_bangunan/models/toko_model.dart';
+import 'package:aplikasi_bangunan/services/toko_service.dart';
 
-class DaftarProdukScreen extends StatefulWidget {
-  const DaftarProdukScreen({super.key});
+class DaftarTokoScreen extends StatefulWidget {
+  const DaftarTokoScreen({super.key});
 
   @override
-  State<DaftarProdukScreen> createState() => _DaftarProdukScreenState();
+  State<DaftarTokoScreen> createState() => _DaftarTokoScreenState();
 }
 
-class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
-  List<Product> _produkList = [];
-  List<Product> _filteredProduk = [];
+class _DaftarTokoScreenState extends State<DaftarTokoScreen> {
+  List<Toko> _tokoList = [];
+  List<Toko> _filteredToko = [];
   final TextEditingController _cariController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _loadProduk();
+    _loadToko();
   }
 
-  void _loadProduk() async {
-    final data = await ProductService.fetchProducts();
+  void _loadToko() async {
+    final data = await TokoService.getAll();
     setState(() {
-      _produkList = data;
-      _filteredProduk = data;
+      _tokoList = data;
+      _filteredToko = data;
     });
   }
 
-  void _filterBynamaProduct(String query) {
-    final namaProduct = (query);
-    if (namaProduct != null) {
-      final result = _produkList.where((p) => p.namaProduct == namaProduct).toList();
-      setState(() => _filteredProduk = result);
+  void _filterById(String query) {
+    final id = int.tryParse(query);
+    if (id != null) {
+      final result = _tokoList.where((t) => t.idToko == id).toList();
+      setState(() => _filteredToko = result);
     } else {
-      setState(() => _filteredProduk = _produkList);
+      setState(() => _filteredToko = _tokoList);
     }
   }
 
-  void _showForm({Product? product}) {
-    final isEdit = product != null;
-    final TextEditingController namaController =
-        TextEditingController(text: product?.namaProduct ?? '');
-    final TextEditingController hargaController =
-        TextEditingController(text: product?.harga.toString() ?? '');
-    final TextEditingController satuanController =
-        TextEditingController(text: product?.satuanBarang ?? '');
+  void _showForm({Toko? toko}) {
+    final isEdit = toko != null;
+    final TextEditingController namaController = TextEditingController(text: toko?.namaToko ?? '');
+    final TextEditingController latController = TextEditingController(text: toko?.latitude.toString() ?? '');
+    final TextEditingController longController = TextEditingController(text: toko?.longitude.toString() ?? '');
 
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(isEdit ? 'Edit Produk' : 'Tambah Produk'),
+        title: Text(isEdit ? 'Edit Toko' : 'Tambah Toko'),
         content: SingleChildScrollView(
           child: Column(
             children: [
-              TextField(controller: namaController, decoration: InputDecoration(labelText: 'Nama Produk')),
-              TextField(controller: hargaController, decoration: InputDecoration(labelText: 'Harga')),
-              TextField(controller: satuanController, decoration: InputDecoration(labelText: 'Satuan (Pcs, Kg, Meter, Liter, Pack)')),
+              TextField(controller: namaController, decoration: InputDecoration(labelText: 'Nama Toko')),
+              TextField(controller: latController, decoration: InputDecoration(labelText: 'Latitude'), keyboardType: TextInputType.number),
+              TextField(controller: longController, decoration: InputDecoration(labelText: 'Longitude'), keyboardType: TextInputType.number),
             ],
           ),
         ),
@@ -64,19 +61,19 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Batal')),
           ElevatedButton(
             onPressed: () async {
-              final newProduct = Product(
-                idProduct: product?.idProduct ?? 0,
-                namaProduct: namaController.text,
-                harga: int.parse(hargaController.text),
-                satuanBarang: satuanController.text,
+              final newToko = Toko(
+                idToko: toko?.idToko ?? 0,
+                namaToko: namaController.text,
+                latitude: double.tryParse(latController.text) ?? 0.0,
+                longitude: double.tryParse(longController.text) ?? 0.0,
               );
               if (isEdit) {
-                await ProductService.updateProduct(newProduct.idProduct, newProduct);
+                await TokoService.update(newToko.idToko, newToko);
               } else {
-                await ProductService.addProduct(newProduct);
+                await TokoService.create(newToko);
               }
               Navigator.pop(context);
-              _loadProduk();
+              _loadToko();
             },
             child: Text(isEdit ? 'Update' : 'Tambah'),
           ),
@@ -85,12 +82,12 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
     );
   }
 
-  void _hapusProduk(int id) async {
+  void _hapusToko(int id) async {
     final confirm = await showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: Text('Konfirmasi'),
-        content: Text('Yakin ingin menghapus produk ini?'),
+        content: Text('Yakin ingin menghapus toko ini?'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: Text('Tidak')),
           TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Ya')),
@@ -98,8 +95,8 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
       ),
     );
     if (confirm == true) {
-      await ProductService.deleteProduct(id);
-      _loadProduk();
+      await TokoService.delete(id);
+      _loadToko();
     }
   }
 
@@ -108,13 +105,13 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 211, 165, 14),
-        title: const Text('Daftar Produk', style: TextStyle(color: Colors.white)),
+        title: const Text('Daftar Toko', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         leading: const BackButton(color: Colors.white),
         actions: [
           IconButton(
             onPressed: () => _showForm(),
-            icon: Icon(Icons.add, color: const Color.fromARGB(255, 0, 0, 0)),
+            icon: Icon(Icons.add, color: Colors.white),
           ),
         ],
       ),
@@ -126,35 +123,35 @@ class _DaftarProdukScreenState extends State<DaftarProdukScreen> {
               controller: _cariController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'Cari Nama Produk',
+                labelText: 'Cari ID Toko',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              onChanged: _filterBynamaProduct,
+              onChanged: _filterById,
             ),
             SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
-                itemCount: _filteredProduk.length,
+                itemCount: _filteredToko.length,
                 itemBuilder: (context, index) {
-                  final p = _filteredProduk[index];
+                  final t = _filteredToko[index];
                   return Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     elevation: 3,
                     margin: EdgeInsets.only(bottom: 12),
                     child: ListTile(
-                      title: Text('${p.idProduct} - ${p.namaProduct}'),
-                      subtitle: Text('Harga: ${p.harga}, Satuan: ${p.satuanBarang}'),
+                      title: Text('${t.idToko} - ${t.namaToko}'),
+                      subtitle: Text('Lat: ${t.latitude}, Long: ${t.longitude}'),
                       trailing: Wrap(
                         spacing: 8,
                         children: [
                           IconButton(
                             icon: Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () => _showForm(product: p),
+                            onPressed: () => _showForm(toko: t),
                           ),
                           IconButton(
                             icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () => _hapusProduk(p.idProduct),
+                            onPressed: () => _hapusToko(t.idToko),
                           ),
                         ],
                       ),
